@@ -50,9 +50,9 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\XContext.Models\XContext.Models.csproj">
-      <Project>{D1AFF279-CADD-4F7D-B198-33282A7FA4D3}</Project>
-      <Name>XContext.Models</Name>
+    <ProjectReference Include="..\XContext.Core\XContext.Core.csproj">
+      <Project>{0dcddcae-3396-4673-86d6-c5fc97e7e550}</Project>
+      <Name>XContext.Core</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

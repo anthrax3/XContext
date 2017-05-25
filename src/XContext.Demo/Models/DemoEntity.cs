@@ -1,8 +1,7 @@
-﻿using XContext.Models;
-
-namespace XContext.Demo.Models
+﻿namespace XContext.Demo.Models
 {
-    public class DemoEntity : XEntity
+    public class DemoEntity
     {
+        public int TestNumber { get; set; } = 0;
     }
 }
