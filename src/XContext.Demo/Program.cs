@@ -5,15 +5,15 @@ namespace XContext.Demo
 {
     class Program
     {
-        static Core.XContext context = new Core.XContext();
+        static Core.XContext _context = new Core.XContext();
 
         static void Main(string[] args)
         {
             WriteSampleFile();
 
-            var sampleFile = ReadSampleFile();
+            ReadSampleFile();
 
-            ExtendSampleFile(sampleFile);
+            InsertNewRecord();
         }
 
         private static void WriteSampleFile()
@@ -23,21 +23,19 @@ namespace XContext.Demo
                 new DemoEntity { TestNumber = 1}
             };
 
-            context.Write(sampleList);
+            _context.Write(sampleList);
         }
 
         private static List<DemoEntity> ReadSampleFile()
         {
-            var sampleFileContents = context.Get<DemoEntity>();
+            var sampleFileContents = _context.Get<DemoEntity>();
 
             return sampleFileContents;
         }
 
-        private static void ExtendSampleFile(List<DemoEntity> sampleFile)
+        private static void InsertNewRecord()
         {
-            sampleFile.Add(new DemoEntity { TestNumber = 2 });
-
-            context.Write(sampleFile);
-        }
+            _context.Insert(new DemoEntity { TestNumber = 2 });
+        }       
     }
 }

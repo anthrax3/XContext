@@ -42,6 +42,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Helpers\SerialisationHelper.cs" />
+    <Compile Include="Models\XEntity.cs" />
     <Compile Include="XContext.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

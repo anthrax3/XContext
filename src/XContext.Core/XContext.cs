@@ -32,6 +32,15 @@ namespace XContext.Core
             File.WriteAllText(filePath, xmlContent);
         }
 
+        public void Insert<T>(T entity)
+        {
+            var entityList = Get<T>();
+
+            entityList.Add(entity);
+
+            Write(entityList);
+        }
+
         private string DetermineFilePath<T>()
         {
             var typeName = typeof(T).Name;
