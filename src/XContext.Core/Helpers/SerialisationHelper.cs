@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using System.Xml;
@@ -11,47 +10,30 @@ namespace XContext.Core.Helpers
     {
         public static List<T> Deserialise<T>(string filePath)
         {
-            try
-            {
-                XmlSerializer serializer = new XmlSerializer(typeof(List<T>));
-                FileStream fs = new FileStream(filePath, FileMode.Open);
+            XmlSerializer xmlSerialiser = new XmlSerializer(typeof(List<T>));
+            FileStream fileStream = new FileStream(filePath, FileMode.Open);
+            StreamReader streamReader = new StreamReader(fileStream, Encoding.UTF8);
+            XmlReader xmlReader = XmlReader.Create(fileStream);
 
-                StreamReader stream = new StreamReader(fs, Encoding.UTF8);
-                XmlReader reader = XmlReader.Create(fs);
+            if (fileStream.Position > 0) fileStream.Position = 0;
 
-                if (fs.Position > 0)
-                    fs.Position = 0;
+            var entityContents = (List<T>)xmlSerialiser.Deserialize(streamReader);
 
-                var entityContents = (List<T>)serializer.Deserialize(stream);
-                fs.Close();
+            fileStream.Close();
 
-                return entityContents;
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
+            return entityContents;
         }
 
         public static string Serialize<T>(this T value)
         {
-            try
-            {
-                var xmlSerialiser = new XmlSerializer(typeof(T));
+            var xmlSerialiser = new XmlSerializer(typeof(T));
+            var stringWriter = new StringWriter();
 
-                using (var stringWriter = new StringWriter())
-                {
-                    using (var writer = XmlWriter.Create(stringWriter, new XmlWriterSettings { Encoding = Encoding.UTF8 }))
-                    {
-                        xmlSerialiser.Serialize(writer, value);
-
-                        return stringWriter.ToString();
-                    }
-                }
-            }
-            catch (Exception ex)
+            using (var writer = XmlWriter.Create(stringWriter, new XmlWriterSettings { Encoding = Encoding.UTF8 }))
             {
-                throw ex;
+                xmlSerialiser.Serialize(writer, value);
+
+                return stringWriter.ToString();
             }
         }
     }

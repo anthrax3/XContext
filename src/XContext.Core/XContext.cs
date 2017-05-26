@@ -5,7 +5,6 @@ using System.IO;
 using System.Linq;
 using System.Linq.Expressions;
 using XContext.Core.Helpers;
-using XContext.Core.Models;
 
 namespace XContext.Core
 {
@@ -13,52 +12,33 @@ namespace XContext.Core
     {
         #region Dependencies
 
-        private readonly XMemory _memory;
+        private readonly XMemory _memoryInstance = new XMemory();
 
         private string _storageLocation = ConfigurationManager.AppSettings["StorageLocation"];
-
-        public XContext()
-        {
-            _memory = new XMemory();
-        }
 
         #endregion Dependencies
 
         public List<T> Get<T>()
         {
-            var entityMemory = _memory.Read<T>();
+            var entityContent = _memoryInstance.Read<T>();
+            if (entityContent != null) return entityContent;
 
-            if (entityMemory != null)
-            {
-                return entityMemory;
-            }
-            else
-            {
-                var filePath = DetermineFilePath<T>();
+            entityContent = LoadEntityFile<T>();
 
-                if (File.Exists(filePath))
-                {
-                    var entityContents = SerialisationHelper.Deserialise<T>(filePath);
-
-                    _memory.Write(entityContents);
-
-                    return entityContents;
-                }
-
-                return new List<T>();
-            }
-            
+            return entityContent;
         }
 
         public List<T> Get<T>(Expression<Func<T, bool>> predicate)
         {
-            var entityContents = Get<T>();
+            var entityContent = Get<T>();
 
-            return entityContents.Where(predicate.Compile()).ToList();
+            return entityContent.Where(predicate.Compile()).ToList();
         }
 
         public void Write<T>(List<T> entityList)
         {
+            _memoryInstance.Write(entityList);
+
             var filePath = DetermineFilePath<T>();
 
             var xmlContent = SerialisationHelper.Serialize(entityList);
@@ -74,7 +54,7 @@ namespace XContext.Core
 
             Write(entityList);
 
-            _memory.Write(entityList);
+            _memoryInstance.Write(entityList);
         }
 
         public void Update<T>(Expression<Func<T, bool>> predicate)
@@ -82,11 +62,31 @@ namespace XContext.Core
             var entityList = Get<T>();
         }
 
+        #region Private Methods
+
         private string DetermineFilePath<T>()
         {
-            var typeName = typeof(T).Name;
+            var entityFilePath = $@"{_storageLocation}\{typeof(T).Name}.xml";
 
-            return $@"{_storageLocation}\{typeName}.xml";
+            return entityFilePath;
         }
+
+        private List<T> LoadEntityFile<T>()
+        {
+            var entityFilePath = DetermineFilePath<T>();
+
+            if (File.Exists(entityFilePath))
+            {
+                var entityContents = SerialisationHelper.Deserialise<T>(entityFilePath);
+
+                _memoryInstance.Write(entityContents);
+
+                return entityContents;
+            }
+
+            return new List<T>();
+        }
+
+        #endregion Private Methods
     }
 }
