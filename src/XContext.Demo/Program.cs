@@ -1,7 +1,4 @@
-﻿using System.Collections.Generic;
-using XContext.Demo.Models;
-
-namespace XContext.Demo
+﻿namespace XContext.Demo
 {
     class Program
     {
@@ -9,33 +6,6 @@ namespace XContext.Demo
 
         static void Main(string[] args)
         {
-            WriteSampleFile();
-
-            ReadSampleFile();
-
-            InsertNewRecord();
         }
-
-        private static void WriteSampleFile()
-        {
-            var sampleList = new List<DemoEntity>
-            {
-                new DemoEntity { TestNumber = 1}
-            };
-
-            _context.Write(sampleList);
-        }
-
-        private static List<DemoEntity> ReadSampleFile()
-        {
-            var sampleFileContents = _context.Get<DemoEntity>();
-
-            return sampleFileContents;
-        }
-
-        private static void InsertNewRecord()
-        {
-            _context.Insert(new DemoEntity { TestNumber = 2 });
-        }       
     }
 }

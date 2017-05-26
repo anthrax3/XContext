@@ -45,6 +45,7 @@
     <Compile Include="Models\XEntity.cs" />
     <Compile Include="XContext.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="XMemory.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
