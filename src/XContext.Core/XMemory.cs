@@ -17,10 +17,13 @@ namespace XContext.Core
         {
             var entityContent = EntityContents.FirstOrDefault();
 
-            return entityContent;
+            if (entityContent == null)
+                return null;
+
+            return entityContent.Cast<T>().ToList();
         }
 
-        internal void Write<T>(List<XEntity> entityContent)
+        internal void Write<T>(List<T> entityContent)
         {
             var inputType = entityContent.GetType().Name;
 
@@ -29,7 +32,7 @@ namespace XContext.Core
             if (existingContent != null)
                 EntityContents.Remove(existingContent);
 
-            EntityContents.Add(entityContent);
+            EntityContents.Add(entityContent.Cast<XEntity>().ToList());
         }
     }
 }

@@ -14,6 +14,7 @@ namespace XContext.Core
         #region Dependencies
 
         private readonly XMemory _memory;
+
         private string _storageLocation = ConfigurationManager.AppSettings["StorageLocation"];
 
         public XContext()
@@ -38,6 +39,8 @@ namespace XContext.Core
                 if (File.Exists(filePath))
                 {
                     var entityContents = SerialisationHelper.Deserialise<T>(filePath);
+
+                    _memory.Write(entityContents);
 
                     return entityContents;
                 }
@@ -70,6 +73,8 @@ namespace XContext.Core
             entityList.Add(entity);
 
             Write(entityList);
+
+            _memory.Write(entityList);
         }
 
         public void Update<T>(Expression<Func<T, bool>> predicate)

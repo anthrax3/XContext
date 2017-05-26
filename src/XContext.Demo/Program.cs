@@ -1,4 +1,6 @@
-﻿namespace XContext.Demo
+﻿using XContext.Demo.Models;
+
+namespace XContext.Demo
 {
     class Program
     {
@@ -6,6 +8,14 @@
 
         static void Main(string[] args)
         {
+            var sample = new DemoEntity
+            {
+                TestNumber = 1
+            };
+
+            _context.Insert(sample);
+
+            var example = _context.Get<DemoEntity>();
         }
     }
 }
