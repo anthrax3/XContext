@@ -6,9 +6,9 @@ using System.Xml.Serialization;
 
 namespace XContext.Core.Helpers
 {
-    public static class SerialisationHelper
+    internal static class SerialisationHelper
     {
-        public static List<T> Deserialise<T>(string filePath)
+        internal static List<T> Deserialise<T>(string filePath)
         {
             XmlSerializer xmlSerialiser = new XmlSerializer(typeof(List<T>));
             FileStream fileStream = new FileStream(filePath, FileMode.Open);
@@ -24,7 +24,7 @@ namespace XContext.Core.Helpers
             return entityContents;
         }
 
-        public static string Serialize<T>(this T value)
+        internal static string Serialize<T>(this T value)
         {
             var xmlSerialiser = new XmlSerializer(typeof(T));
             var stringWriter = new StringWriter();
